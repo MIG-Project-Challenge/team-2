@@ -5,7 +5,6 @@ import argparse
 
 # TODO: incorporate using open prices for buying and closing prices for selling (or should we just use close price?)
 
-
 def calc_sharpe_ratio(portfolio_values):
     # returns annualized sharpe ratio
 
