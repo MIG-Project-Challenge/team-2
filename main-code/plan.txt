@@ -7,4 +7,9 @@ Average Directional Index
 Exponential Moving Average
 - TA-Lib
 
-Golden Cross, RSI, 
+Varun's Recommendation lol : Golden Cross, RSI, 
+
+- RSI
+- AD Line
+- Golden Cross
+- EMA
