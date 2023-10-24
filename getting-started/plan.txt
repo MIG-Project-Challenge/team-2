@@ -1,0 +1,10 @@
+Accumulation/Distribution Line
+- TA-Lib
+
+Average Directional Index
+- TA-Lib
+
+Exponential Moving Average
+- TA-Lib
+
+Golden Cross, RSI, 
