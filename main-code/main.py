@@ -34,15 +34,40 @@ print(open_prices)
 trades = np.zeros_like(open_prices)
 trades
 
-# actually calculate RSI value
-# if rsi > 70 the stock is overbought, if rsi < 30 the stock is underbought
-for stock in range(len(open_prices)):
-    talib_rsi = ta.RSI(stock-stock_close_data, timeperiod=40)
+cash = 25000 #initialize a cash variable to keep track of our money after trades
+
+# calculate golden cross value using TA-lib
+# calculate rsi
+#use both in tandem
+
+for stock in range(len(open_prices)): 
+    fast_sma = ta.SMA(open_prices[stock], timeperiod=5)
+    slow_sma = ta.SMA(open_prices[stock], timeperiod=20)
+    
+    talib_rsi = ta.RSI(stock-stock_close_data, timeperiod=25)
 
     for day in range(1, len(open_prices[0])-1):
-        if talib_rsi[day] > 70: # buy
-            trades[stock][day+1] = -1
-        elif talib_rsi[day] < 30: # sell/short
-            trades[stock][day+1] = 1
-        else: # do nothing
+        
+        # Buy: fast SMA crosses above slow SMA
+        #and rsi is less than 30 -- underbought stock
+        if fast_sma[day] > slow_sma[day] and fast_sma[day-1] <= slow_sma[day-1] and talib_rsi[day] < 30:
+            # we are trading the next day's open price
+            
+            if (cash >= open_prices[stock][day] * 30): #if we have enough cash to make 30 trades
+                trades[stock][day+1] = 30 #BUY
+                cash -= open_prices[stock][day] * 30 #reduce cash accordingly
+
+        # Sell/short: fast SMA crosses below slow SMA
+        #and rsi is greater than 70 -- overbought stock
+        elif fast_sma[day] < slow_sma[day] and fast_sma[day-1] >= slow_sma[day-1] and talib_rsi[day] > 70:
+            # we are trading the next day's open price
+        
+            trades_stock = trades[stock] 
+            numStocks = np.sum(trades_stock) #total stocks we currently have for that stock
+            if (numStocks >= 22): #if we can sell 22
+                trades[stock][day + 1] = -22 #SELL
+                cash += open_prices[stock][day] * 22 #increase cash accordingly
+    
+        # else do nothing
+        else:
             trades[stock][day+1] = 0
